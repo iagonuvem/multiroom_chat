@@ -4,6 +4,6 @@ module.exports = function(application){
     })
 
     application.post('/chat', function(req, res){
-        res.render('chat');
+        application.app.controllers.chat.init(application,req,res);
     })
 }
