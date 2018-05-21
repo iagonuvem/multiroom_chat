@@ -70,7 +70,8 @@
 	
 		<div class="container">
 			<input type="hidden" name="apelido" id="apelido" value="<%=dados.apelido%>"/>
-            <div class="row conversa" id="conversa">
+			<input type="hidden" name="insertedUser" id="insertedUser" value="0"/>
+			<div class="row conversa" id="conversa">
 				<div class="col-md-1"></div>
 				<div class="col-md-10" id="dialogos">
 					
@@ -81,21 +82,8 @@
 			
 			<div class="row participantes" id="participantes" style="display:none">
 				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						Jorge
-					</span>
+				<div class="col-md-10" id="pessoas">
 					
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						José
-					</span>
-					
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						Fernando
-					</span>
 				</div>
 				<div class="col-md-1"></div>
                 
@@ -125,8 +113,12 @@
 			$('#enviar_mensagem').click(function(){
 				socket.emit('sendMsg' , {
 					apelido : $('#apelido').val() ,
-					msg : $('#mensagem').val()
+					msg : $('#mensagem').val(),
+					insertedUser : $('#insertedUser').val()
 				});
+
+				$('#insertedUser').val(1);
+				$('#mensagem').val('');
 			});
 			
 			socket.on('msgUserIn' , function(data){
@@ -138,7 +130,18 @@
 				html +=	'</div>';
 
 				$('#dialogos').append(html);
-			})
+			});
+
+			socket.on('refreshUsers' , function(data){
+				var html = '';
+
+				html += '<span class="participante">';
+				html +=		'<img src="images/ico_usuario.png" />';
+				html +=		data.apelido;
+				html +=	'</span>';
+
+				$('#pessoas').append(html);
+			});
 		</script>
 	</body>
 </html>

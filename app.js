@@ -31,6 +31,17 @@ io.on('connection' , function(socket){
             apelido: data.apelido,
             msg : data.msg
         });
+
+        if(parseInt(data.insertedUser) == 0){
+            socket.emit('refreshUsers', {
+                apelido: data.apelido
+            });
+    
+            socket.broadcast.emit('refreshUsers', {
+                apelido: data.apelido
+            });
+        }
+        
     })
 
 })
