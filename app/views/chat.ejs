@@ -130,6 +130,7 @@
 				html +=	'</div>';
 
 				$('#dialogos').append(html);
+				window.scrollTo(0, document.body.scrollHeight);
 			});
 
 			socket.on('refreshUsers' , function(data){
