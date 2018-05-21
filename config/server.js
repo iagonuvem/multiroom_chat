@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 
 // Inicializa o express
 var app = express();
-app.set('views_engine' , 'ejs');
+app.set('view engine' , 'ejs');
 app.set('views', './app/views');
 
 // Midlewares
@@ -16,9 +16,9 @@ app.use(expressValidator());
 
 //AutoLoads 
 consign()
-    .include('./app/routes')
-    .then('./app/models')
-    .then('./app/controllers')
+    .include('app/routes')
+    .then('app/models')
+    .then('app/controllers')
     .into(app);
 
 module.exports = app;
