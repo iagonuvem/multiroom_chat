@@ -111,6 +111,12 @@
 		<script>
 			var socket = io('http://localhost:3000');
 			
+			$(document).ready(function(){
+				socket.emit('fillData', {
+					apelido : $('#apelido').val()
+				})
+			});
+
 			$("#mensagem").keypress(function(){
 				socket.emit('userTyping', {
 					apelido : $('#apelido').val()
@@ -144,6 +150,18 @@
 				$('#dialogos').append(html);
 				window.scrollTo(0, document.body.scrollHeight);
 			});
+
+			socket.on('msgUserOut', function(data){
+				var html = '';
+
+				html += '<div class="dialogo">';
+				html +=		'<h4>' +data.apelido+ '</h4>';
+				html += 	'<p>' +data.msg+ '</p>'
+				html +=	'</div>';
+
+				$('#dialogos').append(html);
+				window.scrollTo(0, document.body.scrollHeight);
+			})
 			
 
 			socket.on('userTyping', function(data){
