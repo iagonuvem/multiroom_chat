@@ -87,11 +87,12 @@
 				</div>
 				<div class="col-md-1"></div>
                 
-            </div>
+			</div>
         </div>
 		
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 			<div class="container">
+				<span id="isTyping"></span>
 				<div class="panel-body campo-mensagem">
 					<div class="col-md-12">
 						<div class="input-group">
@@ -110,13 +111,24 @@
 		<script>
 			var socket = io('http://localhost:3000');
 			
+			$("#mensagem").keypress(function(){
+				socket.emit('userTyping', {
+					apelido : $('#apelido').val()
+				});
+			});
+			$('#mensagem').focusout(function(){
+				socket.emit('userNotTyping', {});
+			})
+
 			$('#enviar_mensagem').click(function(){
+				socket.emit('userNotTyping', {});
+
 				socket.emit('sendMsg' , {
 					apelido : $('#apelido').val() ,
 					msg : $('#mensagem').val(),
 					insertedUser : $('#insertedUser').val()
 				});
-
+				
 				$('#insertedUser').val(1);
 				$('#mensagem').val('');
 			});
@@ -131,6 +143,17 @@
 
 				$('#dialogos').append(html);
 				window.scrollTo(0, document.body.scrollHeight);
+			});
+			
+
+			socket.on('userTyping', function(data){
+				var html = data.apelido+' está digitando...';
+				$('#isTyping').html('');
+				$('#isTyping').append(html);
+			});
+
+			socket.on('userNotTyping', function(data){
+				$('#isTyping').html('');
 			});
 
 			socket.on('refreshUsers' , function(data){

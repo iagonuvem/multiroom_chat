@@ -43,5 +43,15 @@ io.on('connection' , function(socket){
         }
         
     })
+    
+    socket.on('userTyping', function(data){
+        socket.broadcast.emit('userTyping', {
+            apelido: data.apelido
+        });
+    })
+
+    socket.on('userNotTyping', function(data){
+        socket.broadcast.emit('userNotTyping', {});
+    })
 
 })
